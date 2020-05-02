@@ -42,7 +42,7 @@ class User implements UserInterface
 
     /**
      * @var string The hashed password
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="string", nullable=true)
      * @Groups("user:write")
      * @Assert\NotCompromisedPassword()
      */
@@ -122,6 +122,16 @@ class User implements UserInterface
      * @ORM\OneToMany(targetEntity="App\Entity\UserProductHistory", mappedBy="user", orphanRemoval=true)
      */
     private $userProductHistories;
+
+    /**
+     * @ORM\Column(type="string", nullable=true)
+     */
+    private $facebookId;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $avatar;
 
     public function __construct()
     {
@@ -391,6 +401,30 @@ class User implements UserInterface
                 $userProductHistory->setUser(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getFacebookId(): ?string
+    {
+        return $this->facebookId;
+    }
+
+    public function setFacebookId(?string $facebookId): self
+    {
+        $this->facebookId = $facebookId;
+
+        return $this;
+    }
+
+    public function getAvatar(): ?string
+    {
+        return $this->avatar;
+    }
+
+    public function setAvatar(?string $avatar): self
+    {
+        $this->avatar = $avatar;
 
         return $this;
     }
