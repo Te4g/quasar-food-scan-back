@@ -42,7 +42,7 @@ class User implements UserInterface
 
     /**
      * @var string The hashed password
-     * @ORM\Column(type="string", nullable=true)
+     * @ORM\Column(type="string")
      * @Groups("user:write")
      * @Assert\NotCompromisedPassword()
      */
