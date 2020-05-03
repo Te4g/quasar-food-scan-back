@@ -4,7 +4,6 @@ namespace App\EventSubscriber;
 
 use ApiPlatform\Core\EventListener\EventPriorities;
 use App\Entity\User;
-use App\Manager\UserManager;
 use App\Repository\UserRepository;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -20,7 +19,6 @@ final class UserSubscriber implements EventSubscriberInterface
     private $tokenStorage;
     private $userPasswordEncoder;
     private $userRepository;
-    private $userManager;
 
     public function __construct(
         TokenStorageInterface $tokenStorage,
