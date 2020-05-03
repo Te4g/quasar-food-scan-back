@@ -5,7 +5,9 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
@@ -23,7 +25,7 @@ class AuthController extends AbstractController
     /**
      * @Route("/register", name="register")
      */
-    public function register(Request $request): void
+    public function register(Request $request): Response
     {
         $data = json_decode($request->getContent(), true);
 
@@ -38,5 +40,7 @@ class AuthController extends AbstractController
         ;
 
         $this->userRepository->save($user);
+
+        return new Response('', 201);
     }
 }
