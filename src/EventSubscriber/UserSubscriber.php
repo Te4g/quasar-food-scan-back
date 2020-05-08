@@ -4,7 +4,6 @@ namespace App\EventSubscriber;
 
 use ApiPlatform\Core\EventListener\EventPriorities;
 use App\Entity\User;
-use App\Repository\UserRepository;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
@@ -12,23 +11,21 @@ use Symfony\Component\HttpKernel\Event\ViewEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 
 final class UserSubscriber implements EventSubscriberInterface
 {
     private $tokenStorage;
     private $userPasswordEncoder;
-    private $userRepository;
 
     public function __construct(
         TokenStorageInterface $tokenStorage,
-        UserPasswordEncoderInterface $userPasswordEncoder,
-        UserRepository $userRepository
+        UserPasswordEncoderInterface $userPasswordEncoder
     )
     {
         $this->tokenStorage = $tokenStorage;
         $this->userPasswordEncoder = $userPasswordEncoder;
-        $this->userRepository = $userRepository;
     }
 
     public static function getSubscribedEvents()
@@ -44,6 +41,8 @@ final class UserSubscriber implements EventSubscriberInterface
     public function resolveMe(RequestEvent $event)
     {
         $request = $event->getRequest();
+        dd($request);
+
         if ('api_users_get_item' !== $request->attributes->get('_route')) {
             return;
         }
@@ -53,12 +52,6 @@ final class UserSubscriber implements EventSubscriberInterface
         }
 
         $user = $this->tokenStorage->getToken()->getUser();
-
-        if (!$user instanceof User) {
-            return;
-        }
-
-        $user = $user->getUser();
 
         if (!$user instanceof User) {
             return;
