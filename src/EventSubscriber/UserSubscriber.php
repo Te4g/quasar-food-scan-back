@@ -41,7 +41,6 @@ final class UserSubscriber implements EventSubscriberInterface
     public function resolveMe(RequestEvent $event)
     {
         $request = $event->getRequest();
-        dd($request);
 
         if ('api_users_get_item' !== $request->attributes->get('_route')) {
             return;

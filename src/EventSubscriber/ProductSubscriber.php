@@ -48,8 +48,5 @@ class ProductSubscriber implements EventSubscriberInterface
 
 
 
-
-
-
     }
 }

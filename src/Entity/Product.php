@@ -12,6 +12,8 @@ use Gedmo\Mapping\Annotation as Gedmo;
 /**
  * @ApiResource()
  * @ORM\Entity(repositoryClass="App\Repository\ProductRepository")
+ * @ORM\EntityListeners({"App\EventListener\ProductListener"})
+ * @ORM\HasLifecycleCallbacks()
  */
 class Product
 {
@@ -63,6 +65,22 @@ class Product
      * @ORM\OneToMany(targetEntity="App\Entity\UserProductHistory", mappedBy="product", orphanRemoval=true)
      */
     private $userProductHistories;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $isInStock = false;
+
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $quantityInStock = 0;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="products")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $user;
 
     public function __construct()
     {
@@ -202,6 +220,42 @@ class Product
                 $userProductHistory->setProduct(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getIsInStock(): ?bool
+    {
+        return $this->isInStock;
+    }
+
+    public function setIsInStock(bool $isInStock): self
+    {
+        $this->isInStock = $isInStock;
+
+        return $this;
+    }
+
+    public function getQuantityInStock(): ?int
+    {
+        return $this->quantityInStock;
+    }
+
+    public function setQuantityInStock(int $quantityInStock): self
+    {
+        $this->quantityInStock = $quantityInStock;
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): self
+    {
+        $this->user = $user;
 
         return $this;
     }
