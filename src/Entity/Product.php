@@ -2,18 +2,27 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use App\Controller\ProductController;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\BooleanFilter;
 
 
 /**
- * @ApiResource()
+ * @ApiResource(
+ *     collectionOperations={
+ *          "get",
+ *          "post_product"={
+ *              "method"="POST",
+ *              "controller"=ProductController::class
+ *          }
+ *     }
+ * )
  * @ORM\Entity(repositoryClass="App\Repository\ProductRepository")
- * @ORM\EntityListeners({"App\EventListener\ProductListener"})
- * @ORM\HasLifecycleCallbacks()
  */
 class Product
 {
@@ -68,6 +77,7 @@ class Product
 
     /**
      * @ORM\Column(type="boolean")
+     * @ApiFilter(BooleanFilter::class)
      */
     private $isInStock = false;
 
